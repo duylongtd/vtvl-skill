@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*_ket_qua.*
+/out/
+# bộ biểu thật và kết quả kiểm tra không đưa lên git
+*_ban_sua_*.xlsx
+Bo_bieu_VTVL_30000*.xlsx

@@ -1,0 +1,65 @@
+# vtvl-kiem-tra
+
+Công cụ kiểm tra **logic** Bộ biểu vị trí việc làm (VTVL) theo Hướng dẫn số 07-HD/BTCTW (19/10/2026) và Công văn số 05-CV/BCĐ (03/11/2026) của Ban Chỉ đạo VTVL, biên chế Tỉnh ủy Hà Tĩnh.
+
+App kê khai chỉ kiểm tra định dạng. Công cụ này kiểm tra số liệu có hợp lý không: ô công thức bị gõ đè, căn cứ thiếu điều khoản, cấp phó dùng sai phương pháp, giờ bị nhân ngày × 8, giải trình sao chép, D1 kê vị trí thay người… Mỗi phát hiện chỉ ra **biểu, ô, sai gì, sửa thế nào, căn cứ văn bản nào**.
+
+Dùng được theo 3 cách: cho AI (Claude, Hermes, ChatGPT… đọc `SKILL.md`), chạy tay bằng Python, hoặc tích hợp vào quy trình của cơ quan đầu mối. Cách nào cũng ra **cùng một kết quả** vì quy tắc nằm trong code, không nằm trong "cách nghĩ" của AI.
+
+## Cài đặt
+
+```bash
+git clone https://github.com/duylongtd/vtvl-skill.git
+cd vtvl-skill
+pip install -r requirements.txt
+```
+
+Yêu cầu Python 3.9 trở lên. Windows: cài Python từ python.org, tích "Add to PATH".
+
+## Dùng
+
+```bash
+python scripts/kiem_tra.py "Bo_bieu_xa_ABC.xlsx" --bien-che 25 --so-nguoi 23
+```
+
+Tham số:
+
+| Tham số | Ý nghĩa |
+|---|---|
+| `--bien-che N` | Tổng biên chế được giao (cho quy tắc C3-03, D2-02) |
+| `--so-nguoi M` | Số người có mặt tại 30/9/2026 (cho D1-01) |
+| `--da-tham-dinh` | Hồ sơ đã được cơ quan đầu mối thẩm định (bỏ qua TT-01..03) |
+| `--loai-don-vi xa\|tinh\|su_nghiep` | Mặc định `xa` (ngoại lệ HĐND xã) |
+| `--out TEN` | Tên tệp kết quả, không đuôi |
+
+Kết quả: `TEN.docx` (báo cáo theo từng biểu), `TEN.xlsx` (bảng lọc), `TEN.json` (máy đọc). Công cụ **không sửa** tệp gốc.
+
+## Dùng với AI
+
+- **Claude**: tải thư mục này lên làm skill (Settings → Skills), hoặc đặt vào `.claude/skills/vtvl-kiem-tra/` trong project. Gửi file và nói "kiểm tra bộ biểu VTVL".
+- **AI khác**: đưa `SKILL.md` làm hướng dẫn hệ thống và cho AI quyền chạy `scripts/kiem_tra.py`. AI không cần "hiểu" quy tắc, chỉ cần chạy script và đọc kết quả.
+
+## Bộ quy tắc
+
+Xem `references/RULES.md`: khoảng 70 quy tắc, mỗi quy tắc có mã, mức (BẮT BUỘC / CẦN / LƯU Ý theo Phụ lục 2 của CV05) và căn cứ. Ngưỡng và danh mục để trong `config/quy_tac.json`, bản đồ cột trong `config/bieu.json`; thay đổi quy tắc thì sửa ở đó, không sửa code.
+
+Hai điểm văn bản chưa thống nhất, đang để cấu hình chấp nhận cả hai cách (xem cuối RULES.md):
+1. Cấp phó dùng PP1 (CV05) hay PP1+PP2 (Yêu cầu kiểm tra).
+2. C3 để "Tính thử" đến khi thẩm định (CV05), nhưng app chỉ chuyển sang Dự báo/D2 khi "Đã kiểm chứng".
+
+## Test
+
+```bash
+python tests/chay_test.py
+```
+Tạo lại fixture từ bộ biểu chuẩn (khi Ban ban hành bản mới):
+```bash
+python tests/tao_bo_bieu_lite.py "Bo_bieu_chuan.xlsx"
+python tests/tao_file_test.py tests/bo_bieu_lite.xlsx
+```
+
+## Bảo mật
+Script chạy hoàn toàn trên máy, không gửi dữ liệu đi đâu. Theo CV05, không đưa bộ biểu chứa dữ liệu cá nhân lên công cụ AI công cộng hoặc thư mục chia sẻ công khai; dùng AI chạy trên máy hoặc AI được cơ quan cho phép.
+
+## Phiên bản
+Xem `CHANGELOG.md`. Báo cáo luôn ghi phiên bản công cụ để biết hai người kiểm tra có dùng cùng bản hay không.

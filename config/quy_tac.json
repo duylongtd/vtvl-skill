@@ -1,0 +1,231 @@
+{
+ "_ghi_chu": "Tham số và danh mục dùng chung cho các quy tắc. Sửa ở đây khi cơ quan đầu mối thống nhất khác đi; không sửa trong code.",
+ "nguong": {
+  "B1_gio_tong_canh_bao": 1000,
+  "C3_chenh_lech_phan_tram": 20,
+  "A2_ten_cong_viec_toi_thieu_tu": 3,
+  "B1_so_dong_lap_gio_bo_sung": 3,
+  "D1_so_dong_lap_gio": 3,
+  "C3_so_dong_lap_giai_trinh": 2,
+  "T09_so_dong_lien_tiep_tang_dan": 3
+ },
+ "cap_pho_phuong_phap": {
+  "_ghi_chu": "YC bản 2: cấp phó = PP1+PP2. CV 05-CV/BCĐ: lãnh đạo quản lý = PP1. Chưa thống nhất → chấp nhận cả hai; khi chốt thì xoá bớt.",
+  "chap_nhan": [
+   "PP1",
+   "PP1+PP2"
+  ]
+ },
+ "hdnd_xa_cap_pho_chap_nhan": [
+  "PP1",
+  "PP1+PP2"
+ ],
+ "chuc_danh": {
+  "dung_dau": [
+   "giám đốc",
+   "chánh văn phòng",
+   "chánh thanh tra",
+   "trưởng phòng",
+   "trưởng ban",
+   "chi cục trưởng",
+   "hiệu trưởng",
+   "cục trưởng",
+   "viện trưởng",
+   "trưởng khoa",
+   "đội trưởng",
+   "trạm trưởng",
+   "chủ tịch",
+   "bí thư",
+   "trưởng",
+   "thủ trưởng",
+   "giám đốc trung tâm"
+  ],
+  "cap_pho": [
+   "phó giám đốc",
+   "phó chánh văn phòng",
+   "phó chánh thanh tra",
+   "phó trưởng phòng",
+   "phó trưởng ban",
+   "phó chi cục trưởng",
+   "phó hiệu trưởng",
+   "phó cục trưởng",
+   "phó viện trưởng",
+   "phó trưởng khoa",
+   "phó chủ tịch",
+   "phó bí thư",
+   "phó trưởng",
+   "phó"
+  ],
+  "hdnd_tu_khoa": [
+   "hội đồng nhân dân",
+   "hđnd"
+  ]
+ },
+ "danh_muc": {
+  "C3_phuong_phap": [
+   "PP1",
+   "PP2",
+   "PP3",
+   "PP1+PP2",
+   "PP1+PP3",
+   "PP2+PP3",
+   "PP1+PP2+PP3"
+  ],
+  "C3_trang_thai": [
+   "Tính thử",
+   "Chưa đủ dữ liệu",
+   "Đã kiểm chứng",
+   "Không áp dụng"
+  ],
+  "DB_trang_thai": [
+   "Đã kiểm chứng",
+   "Chưa kiểm chứng"
+  ],
+  "D2_trang_thai": [
+   "Đang xây dựng",
+   "Đã hoàn thành ở đơn vị",
+   "Đã thẩm định",
+   "Đã được quyết định"
+  ],
+  "C1_che_do": [
+   "Phổ biến (40 giờ/tuần)",
+   "Đặc thù"
+  ],
+  "C1_xac_nhan": [
+   "Đã kiểm chứng",
+   "Chưa kiểm chứng"
+  ],
+  "B1_trang_thai_can_cu": [
+   "Có định mức",
+   "Kiểm đếm, ước lượng thực tế"
+  ],
+  "B2_loai": [
+   "Số hóa",
+   "Cải tiến quy trình",
+   "Thuê dịch vụ/đặt hàng",
+   "Tự chủ",
+   "Xã hội hóa",
+   "Công việc mới phát sinh"
+  ],
+  "B2_co_so_B1": [
+   "Trước thay đổi, có điều chỉnh",
+   "Đã đo sau thay đổi (không trừ)"
+  ],
+  "B2_trang_thai": [
+   "Đã kiểm chứng",
+   "Chưa kiểm chứng",
+   "Ước lượng tham khảo"
+  ],
+  "D1_loai": [
+   "Cán bộ",
+   "Công chức",
+   "Viên chức",
+   "Hợp đồng lao động",
+   "Khác"
+  ],
+  "D1_trang_thai": [
+   "Đã kiểm chứng",
+   "Chưa kiểm chứng"
+  ],
+  "A1_trang_thai": [
+   "Tiếp tục thực hiện",
+   "Mới tiếp nhận",
+   "Đã chuyển giao",
+   "Không còn thực hiện"
+  ]
+ },
+ "trang_thai_chua_tham_dinh": {
+  "C3_L": [
+   "Tính thử",
+   "Chưa đủ dữ liệu",
+   "Không áp dụng"
+  ],
+  "DB_F": [
+   "Chưa kiểm chứng"
+  ],
+  "D2_I": [
+   "Đang xây dựng"
+  ]
+ },
+ "can_cu": {
+  "loai_van_ban": [
+   "luật",
+   "nghị định",
+   "nghị quyết",
+   "thông tư",
+   "quyết định",
+   "quy định",
+   "hướng dẫn",
+   "kết luận",
+   "chỉ thị",
+   "kế hoạch",
+   "công văn",
+   "quy chế",
+   "điều lệ",
+   "qđ",
+   "nđ",
+   "nq",
+   "tt",
+   "hd",
+   "kh",
+   "cv"
+  ],
+  "dieu_khoan": [
+   "điều",
+   "khoản",
+   "điểm"
+  ],
+  "chung_chung": [
+   "theo quy định",
+   "văn bản liên quan",
+   "các văn bản",
+   "quy định hiện hành",
+   "…",
+   "...",
+   "xx",
+   "nt",
+   "như trên"
+  ]
+ },
+ "nguon_thoi_gian": {
+  "_ghi_chu": "Cột I của B1 phải có số phiếu/văn bản + ngày + người/cơ quan xác nhận (CV05 PL1-1, PL2-5)",
+  "tu_khoa_phieu": [
+   "phiếu đo",
+   "phiếu khảo sát",
+   "định mức",
+   "thông tư",
+   "quyết định",
+   "văn bản"
+  ],
+  "mau_so_hieu": "(số|no\\.?|mã)\\s*[:#]?\\s*[A-Za-z0-9/.\\-]+",
+  "mau_ngay": "\\d{1,2}/\\d{1,2}/\\d{4}|ngày\\s+\\d{1,2}|tháng\\s+\\d{1,2}/\\d{4}"
+ },
+ "pp3_tu_khoa_cong_viec": [
+  "tham mưu",
+  "nghiên cứu",
+  "thẩm định",
+  "kiểm tra",
+  "giám sát",
+  "xây dựng đề án",
+  "soạn thảo",
+  "tổng hợp báo cáo"
+ ],
+ "bang_cap_tu_khoa": [
+  "đại học",
+  "cử nhân",
+  "thạc sĩ",
+  "tiến sĩ",
+  "cao đẳng",
+  "trung cấp",
+  "trình độ",
+  "bằng"
+ ],
+ "D1_dau_hieu_khong_phai_nguoi": [
+  "chưa bố trí",
+  "dự kiến",
+  "vị trí",
+  "trống",
+  "tuyển",
+  "chưa có người"
+ ]
+}
