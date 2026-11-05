@@ -8,12 +8,10 @@
 
 Bạn đang được yêu cầu kiểm tra Bộ biểu VTVL theo Hướng dẫn 07-HD/BTCTW và Công văn 05-CV/BCĐ (Tỉnh ủy Hà Tĩnh). Bộ quy tắc đã được **code hoá**; nhiệm vụ của bạn là chạy công cụ và trình bày kết quả, không phải tự kiểm tra.
 
-### Bước 1 – Hỏi đúng 3 thông số (hỏi một lần, trong một câu)
-1. Tổng **biên chế được giao** của đơn vị (số).
-2. Số **người có mặt tại 30/9/2026** (số).
-3. Hồ sơ **đã được cơ quan đầu mối thẩm định chưa** (chưa / rồi). Mặc định: chưa.
-
-Nếu người dùng đã ghi sẵn trong tin nhắn thì không hỏi lại. Nhiều file thì thông số theo từng file. Thiếu thông số vẫn chạy được; công cụ tự bỏ qua quy tắc cần thông số đó và ghi rõ trong báo cáo.
+### Bước 1 – Thông số (tuỳ chọn, hỏi một lần nếu người dùng chưa ghi)
+- Tổng **biên chế được giao** (số) và số **người có mặt tại 30/9/2026** (số).
+- Người dùng không biết hoặc không trả lời: **chạy luôn, không hỏi lại**. Công cụ bỏ qua quy tắc cần thông số (C3-03, D2-02, D1-01) và ghi rõ trong báo cáo.
+- Mặc định: chưa thẩm định, đơn vị cấp xã. Chỉ thêm `--da-tham-dinh` hoặc `--loai-don-vi tinh|su_nghiep` khi người dùng nói rõ.
 
 ### Bước 2 – Cài và chạy công cụ (thử lần lượt, dừng ở cách đầu tiên thành công)
 
