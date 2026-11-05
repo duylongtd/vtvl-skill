@@ -54,7 +54,7 @@ Nếu sandbox không có mạng: nói rõ với người dùng và đề nghị 
 
 ## Dành cho người dùng
 
-**Cách dùng nhanh với AI:** mở Claude / ChatGPT / Gemini → đính kèm file .xlsx bộ biểu → dán link `https://github.com/duylongtd/vtvl-skill` → gõ *"Dựa theo skill này hãy kiểm tra file, biên chế giao 25, có mặt 23, chưa thẩm định"*. Chi tiết từng AI và cách chạy không cần AI: **[docs/HUONG_DAN_AI.md](docs/HUONG_DAN_AI.md)**.
+**Cách dùng nhanh với AI:** mở Claude / ChatGPT / Gemini → đính kèm file .xlsx bộ biểu → dán link `https://github.com/duylongtd/vtvl-skill` → gõ *"Dựa theo skill này hãy kiểm tra file, biên chế giao 25, có mặt 23, chưa thẩm định"*. Prompt chuẩn để copy: **[docs/PROMPT.md](docs/PROMPT.md)**. Chi tiết từng AI và cách chạy không cần AI: **[docs/HUONG_DAN_AI.md](docs/HUONG_DAN_AI.md)**.
 
 **Chạy trên máy (an toàn nhất với dữ liệu thật):**
 ```bash
