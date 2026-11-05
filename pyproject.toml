@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vtvl-kiem-tra"
+version = "0.2.0"
+description = "Kiểm tra logic Bộ biểu vị trí việc làm (VTVL) theo HD 07-HD/BTCTW và CV 05-CV/BCĐ"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = ["openpyxl>=3.1", "python-docx>=1.1"]
+
+[project.scripts]
+vtvl-kiem-tra = "vtvl_kiem_tra.kiem_tra:main"
+
+[tool.setuptools]
+packages = ["vtvl_kiem_tra"]
+
+[tool.setuptools.package-data]
+vtvl_kiem_tra = ["config/*.json"]

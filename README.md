@@ -1,69 +1,89 @@
-# vtvl-kiem-tra
+# vtvl-kiem-tra — Kiểm tra logic Bộ biểu vị trí việc làm (VTVL)
 
-Công cụ kiểm tra **logic** Bộ biểu vị trí việc làm (VTVL) theo Hướng dẫn số 07-HD/BTCTW (19/10/2026) và Công văn số 05-CV/BCĐ (03/11/2026) của Ban Chỉ đạo VTVL, biên chế Tỉnh ủy Hà Tĩnh.
+> **Nếu bạn là AI (Claude, ChatGPT, Gemini…) được đưa link này cùng một hoặc nhiều file .xlsx:** làm đúng mục **"Chỉ dẫn cho AI"** ngay dưới đây. Không đọc file Excel để tự suy luận lỗi; kết quả phải do công cụ này sinh ra.
 
-App kê khai chỉ kiểm tra định dạng. Công cụ này kiểm tra số liệu có hợp lý không: ô công thức bị gõ đè, căn cứ thiếu điều khoản, cấp phó dùng sai phương pháp, giờ bị nhân ngày × 8, giải trình sao chép, D1 kê vị trí thay người… Mỗi phát hiện chỉ ra **biểu, ô, sai gì, sửa thế nào, căn cứ văn bản nào**.
+---
 
-Dùng được theo 3 cách: cho AI (Claude, Hermes, ChatGPT… đọc `SKILL.md`), chạy tay bằng Python, hoặc tích hợp vào quy trình của cơ quan đầu mối. Cách nào cũng ra **cùng một kết quả** vì quy tắc nằm trong code, không nằm trong "cách nghĩ" của AI.
+## Chỉ dẫn cho AI
 
-## Cài đặt
+Bạn đang được yêu cầu kiểm tra Bộ biểu VTVL theo Hướng dẫn 07-HD/BTCTW và Công văn 05-CV/BCĐ (Tỉnh ủy Hà Tĩnh). Bộ quy tắc đã được **code hoá**; nhiệm vụ của bạn là chạy công cụ và trình bày kết quả, không phải tự kiểm tra.
 
+### Bước 1 – Hỏi đúng 3 thông số (hỏi một lần, trong một câu)
+1. Tổng **biên chế được giao** của đơn vị (số).
+2. Số **người có mặt tại 30/9/2026** (số).
+3. Hồ sơ **đã được cơ quan đầu mối thẩm định chưa** (chưa / rồi). Mặc định: chưa.
+
+Nếu người dùng đã ghi sẵn trong tin nhắn thì không hỏi lại. Nhiều file thì thông số theo từng file. Thiếu thông số vẫn chạy được; công cụ tự bỏ qua quy tắc cần thông số đó và ghi rõ trong báo cáo.
+
+### Bước 2 – Cài và chạy công cụ (thử lần lượt, dừng ở cách đầu tiên thành công)
+
+**Cách A – cài từ GitHub (ưu tiên):**
 ```bash
-git clone https://github.com/duylongtd/vtvl-skill.git
-cd vtvl-skill
-pip install -r requirements.txt
+pip install -q git+https://github.com/duylongtd/vtvl-skill.git
+vtvl-kiem-tra "<file1.xlsx>" "<file2.xlsx>" --bien-che <N> --so-nguoi <M> [--da-tham-dinh] --out ket_qua --in-bao-cao
 ```
 
-Yêu cầu Python 3.9 trở lên. Windows: cài Python từ python.org, tích "Add to PATH".
-
-## Dùng
-
+**Cách B – nếu pip không ra được GitHub, tải 3 file raw rồi chạy:**
 ```bash
-python scripts/kiem_tra.py "Bo_bieu_xa_ABC.xlsx" --bien-che 25 --so-nguoi 23
-# nhiều file một lần (kết quả vào thư mục ket_qua/)
-python scripts/kiem_tra.py xa_A.xlsx xa_B.xlsx xa_C.xlsx --bien-che 25 --so-nguoi 23 --out ket_qua
+mkdir -p vtvl_kiem_tra/config
+curl -sL https://raw.githubusercontent.com/duylongtd/vtvl-skill/main/vtvl_kiem_tra/kiem_tra.py -o vtvl_kiem_tra/kiem_tra.py
+curl -sL https://raw.githubusercontent.com/duylongtd/vtvl-skill/main/vtvl_kiem_tra/config/bieu.json -o vtvl_kiem_tra/config/bieu.json
+curl -sL https://raw.githubusercontent.com/duylongtd/vtvl-skill/main/vtvl_kiem_tra/config/quy_tac.json -o vtvl_kiem_tra/config/quy_tac.json
+pip install -q openpyxl python-docx
+python vtvl_kiem_tra/kiem_tra.py "<file.xlsx>" --bien-che <N> --so-nguoi <M> --out ket_qua --in-bao-cao
 ```
+Nếu sandbox không có mạng: nói rõ với người dùng và đề nghị họ **đính kèm 3 file trên** (hoặc file ZIP của repo), rồi chạy như Cách B.
 
-Tham số:
+**Cách C – không chạy được Python (chế độ thủ công, chỉ khi A và B đều thất bại):**
+Đọc `references/RULES.md`, tự kiểm tra bằng tay và **ghi rõ ở đầu kết quả**: *"CHẾ ĐỘ THỦ CÔNG – không bảo đảm đầy đủ và thống nhất như công cụ; cần chạy lại bằng công cụ trước khi gửi"*. Vẫn dùng đúng mã quy tắc, mức và mẫu trình bày ở Bước 3.
 
-| Tham số | Ý nghĩa |
-|---|---|
-| `--bien-che N` | Tổng biên chế được giao (cho quy tắc C3-03, D2-02) |
-| `--so-nguoi M` | Số người có mặt tại 30/9/2026 (cho D1-01) |
-| `--da-tham-dinh` | Hồ sơ đã được cơ quan đầu mối thẩm định (bỏ qua TT-01..03) |
-| `--loai-don-vi xa\|tinh\|su_nghiep` | Mặc định `xa` (ngoại lệ HĐND xã) |
-| `--out TEN` | Tên tệp kết quả, không đuôi |
+### Bước 3 – Trình bày kết quả (mẫu cố định)
+- Dòng đầu: `Tổng: BẮT BUỘC x · CẦN y · LƯU Ý z` cho từng file. Nếu BẮT BUỘC > 0: *"Hồ sơ còn lỗi BẮT BUỘC sẽ bị trả lại (CV05 mục II)."*
+- Liệt kê **mọi lỗi BẮT BUỘC**, mỗi lỗi một dòng: `Biểu – Ô – sai gì – sửa thế nào – [mã quy tắc]`.
+- Lỗi CẦN: nêu số lượng theo biểu; chi tiết nằm trong báo cáo.
+- Đưa file `ket_qua/<tên>_ket_qua.docx` (và `.xlsx`) cho người dùng tải; nếu không đưa file được thì dán nguyên báo cáo Markdown mà `--in-bao-cao` đã in.
+- Kết thúc bằng: *"Sửa trên bộ biểu/app, gửi lại file để kiểm tra đến khi BẮT BUỘC = 0."*
 
-Kết quả: `TEN.docx` (báo cáo theo từng biểu), `TEN.xlsx` (bảng lọc), `TEN.json` (máy đọc). Công cụ **không sửa** tệp gốc.
+### Không được làm
+- Không sửa, không "sửa giúp", không tạo bản "đã làm sạch" của file. Người kê khai tự sửa và chịu trách nhiệm.
+- Không thêm quy tắc ngoài `references/RULES.md`; gặp trường hợp chưa có quy tắc, trả lời "chưa có trong bộ quy tắc, cần hỏi cơ quan đầu mối".
+- Không nêu tên người, số điện thoại hay dữ liệu cá nhân có trong file; chỉ dẫn mã ô.
+- Không gửi file lên dịch vụ ngoài sandbox.
 
-## Dùng với AI
+---
 
-Hướng dẫn từng bước cho Claude, ChatGPT, Gemini và Colab: **[docs/HUONG_DAN_AI.md](docs/HUONG_DAN_AI.md)**.
+## Dành cho người dùng
 
-- **Claude**: tải thư mục này lên làm skill (Settings → Skills), hoặc đặt vào `.claude/skills/vtvl-kiem-tra/` trong project. Gửi file và nói "kiểm tra bộ biểu VTVL".
-- **AI khác**: đưa `SKILL.md` làm hướng dẫn hệ thống và cho AI quyền chạy `scripts/kiem_tra.py`. AI không cần "hiểu" quy tắc, chỉ cần chạy script và đọc kết quả.
+**Cách dùng nhanh với AI:** mở Claude / ChatGPT / Gemini → đính kèm file .xlsx bộ biểu → dán link `https://github.com/duylongtd/vtvl-skill` → gõ *"Dựa theo skill này hãy kiểm tra file, biên chế giao 25, có mặt 23, chưa thẩm định"*. Chi tiết từng AI và cách chạy không cần AI: **[docs/HUONG_DAN_AI.md](docs/HUONG_DAN_AI.md)**.
+
+**Chạy trên máy (an toàn nhất với dữ liệu thật):**
+```bash
+pip install git+https://github.com/duylongtd/vtvl-skill.git
+vtvl-kiem-tra xa_A.xlsx xa_B.xlsx --bien-che 25 --so-nguoi 23 --out ket_qua
+```
+Kết quả trong `ket_qua/`: `.docx` (báo cáo theo từng biểu), `.xlsx` (bảng lọc), `.md`, `.json`. Công cụ **không sửa** file gốc.
+
+**Lưu ý bảo mật (CV05):** bộ biểu chứa dữ liệu cá nhân ở D1. Chỉ dùng tài khoản AI được cơ quan cho phép; với tài khoản công cộng, hãy chạy trên máy rồi chỉ đưa **file kết quả** (chỉ có mã ô) cho AI giải thích.
 
 ## Bộ quy tắc
+`references/RULES.md`: khoảng 70 quy tắc, mỗi quy tắc có mã, mức (BẮT BUỘC / CẦN / LƯU Ý theo Phụ lục 2 của CV05) và căn cứ văn bản. Ngưỡng, danh mục ở `vtvl_kiem_tra/config/quy_tac.json`; bản đồ cột ở `vtvl_kiem_tra/config/bieu.json`. Đổi quy tắc thì sửa ở đó, không sửa code.
 
-Xem `references/RULES.md`: khoảng 70 quy tắc, mỗi quy tắc có mã, mức (BẮT BUỘC / CẦN / LƯU Ý theo Phụ lục 2 của CV05) và căn cứ. Ngưỡng và danh mục để trong `config/quy_tac.json`, bản đồ cột trong `config/bieu.json`; thay đổi quy tắc thì sửa ở đó, không sửa code.
-
-Hai điểm văn bản chưa thống nhất, đang để cấu hình chấp nhận cả hai cách (xem cuối RULES.md):
-1. Cấp phó dùng PP1 (CV05) hay PP1+PP2 (Yêu cầu kiểm tra).
-2. C3 để "Tính thử" đến khi thẩm định (CV05), nhưng app chỉ chuyển sang Dự báo/D2 khi "Đã kiểm chứng".
+Hai điểm văn bản chưa thống nhất (xem cuối RULES.md): cấp phó dùng PP1 hay PP1+PP2; C3 "Tính thử" hay "Đã kiểm chứng" khi lập D2. Hiện chấp nhận cả hai.
 
 ## Test
-
 ```bash
 python tests/chay_test.py
 ```
-Tạo lại fixture từ bộ biểu chuẩn (khi Ban ban hành bản mới):
-```bash
-python tests/tao_bo_bieu_lite.py "Bo_bieu_chuan.xlsx"
-python tests/tao_file_test.py tests/bo_bieu_lite.xlsx
+Khi Ban ban hành bộ biểu mới: `python tests/tao_bo_bieu_lite.py Bo_bieu_chuan.xlsx` rồi `python tests/tao_file_test.py tests/bo_bieu_lite.xlsx`.
+
+## Cấu trúc
 ```
-
-## Bảo mật
-Script chạy hoàn toàn trên máy, không gửi dữ liệu đi đâu. Theo CV05, không đưa bộ biểu chứa dữ liệu cá nhân lên công cụ AI công cộng hoặc thư mục chia sẻ công khai; dùng AI chạy trên máy hoặc AI được cơ quan cho phép.
-
-## Phiên bản
-Xem `CHANGELOG.md`. Báo cáo luôn ghi phiên bản công cụ để biết hai người kiểm tra có dùng cùng bản hay không.
+README.md                 chỉ dẫn cho AI + người dùng (file đầu tiên AI đọc khi nhận link)
+SKILL.md                  định dạng skill của Claude
+vtvl_kiem_tra/            package: kiem_tra.py + config/
+scripts/kiem_tra.py       bọc tương thích để chạy tay
+references/RULES.md       bộ quy tắc đầy đủ, có nguồn
+docs/HUONG_DAN_AI.md      hướng dẫn từng bước cho Claude, ChatGPT, Gemini, Colab
+tests/                    fixture rút gọn, file đúng/sai, kỳ vọng
+```
+Phiên bản: xem `CHANGELOG.md`. Báo cáo luôn ghi phiên bản công cụ.

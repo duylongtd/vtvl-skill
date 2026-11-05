@@ -1,0 +1,2 @@
+[console_scripts]
+vtvl-kiem-tra = vtvl_kiem_tra.kiem_tra:main

@@ -16,10 +16,11 @@ App kê khai VTVL chỉ kiểm tra **định dạng** (mã có tồn tại, ô b
    - Số **người có mặt tại 30/9/2026** (số).
    - Hồ sơ **đã được cơ quan đầu mối thẩm định chưa** (chưa / rồi). Mặc định: chưa.
    Loại đơn vị mặc định là `xa`; đổi sang `tinh` hoặc `su_nghiep` nếu người dùng nói rõ.
-3. **Chạy script**, không tự đọc file bằng cách khác:
+3. **Chạy công cụ**, không tự đọc file bằng cách khác:
    ```
-   python scripts/kiem_tra.py <file.xlsx> --bien-che <N> --so-nguoi <M> [--da-tham-dinh] [--loai-don-vi xa] --out <ten_ket_qua>
+   python scripts/kiem_tra.py <file.xlsx> --bien-che <N> --so-nguoi <M> [--da-tham-dinh] [--loai-don-vi xa] --out <ten_ket_qua> --in-bao-cao
    ```
+   (Nếu skill chưa có trên máy: `pip install git+https://github.com/duylongtd/vtvl-skill.git` rồi dùng lệnh `vtvl-kiem-tra` với cùng tham số.)
    Nhiều file: liệt kê tất cả sau `kiem_tra.py`, `--out` là thư mục. Thiếu thông số thì vẫn chạy; script tự bỏ qua quy tắc cần thông số đó và ghi rõ trong báo cáo.
 4. **Trả kết quả** cho người dùng:
    - Gửi file `<ten_ket_qua>.docx` (báo cáo theo từng biểu, đúng form Yêu cầu kiểm tra) và `.xlsx` (để lọc).
@@ -48,9 +49,10 @@ Mỗi phát hiện có **mã quy tắc** (ví dụ `C3-09`). Tra mã trong `refe
 ## Cấu trúc
 ```
 SKILL.md                 hướng dẫn này
-scripts/kiem_tra.py      bộ kiểm tra (Python 3.9+, openpyxl, python-docx)
-config/bieu.json         bản đồ sheet → cột, cột công thức (đối chiếu bộ biểu 23/10/2026)
-config/quy_tac.json      ngưỡng, danh mục, từ khoá chức danh, điểm chưa chốt
+vtvl_kiem_tra/kiem_tra.py        bộ kiểm tra (Python 3.9+, openpyxl, python-docx)
+vtvl_kiem_tra/config/bieu.json   bản đồ sheet → cột, cột công thức (đối chiếu bộ biểu 23/10/2026)
+vtvl_kiem_tra/config/quy_tac.json ngưỡng, danh mục, từ khoá chức danh, điểm chưa chốt
+scripts/kiem_tra.py              bọc tương thích
 references/RULES.md      bộ quy tắc đầy đủ, có nguồn
 tests/                   fixture rút gọn + script tạo file test + kỳ vọng
 ```

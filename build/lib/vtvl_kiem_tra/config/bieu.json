@@ -1,0 +1,395 @@
+{
+ "_ghi_chu": "Bản đồ sheet → cột, đối chiếu với tệp 'Bo_bieu_VTVL_30000_dong_ban_sua_de_nghi_UEB_v2_2026-10-23.xlsx': dòng 1 tiêu đề biểu, dòng 2 tiêu đề cột, dữ liệu từ dòng 3 đến 30.002. Khi Ban ban hành bản mới chỉ cần sửa file này.",
+ "ky_ke_khai": "01/10/2025 – 30/09/2026",
+ "quy_gio_pho_bien": 1904,
+ "nam_du_bao": [
+  2027,
+  2028,
+  2029,
+  2030,
+  2031
+ ],
+ "sheets": {
+  "A1": {
+   "ten": "Biểu A1 – Danh mục nhiệm vụ",
+   "sheet_candidates": [
+    "1. A1_NhiemVu",
+    "A1_NhiemVu",
+    "A1"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã nhiệm vụ",
+    "B": "Tên nhiệm vụ",
+    "C": "Cơ quan",
+    "D": "Căn cứ",
+    "E": "Kỳ",
+    "F": "Trạng thái",
+    "G": "Nguồn"
+   },
+   "formula_cols": [],
+   "required": [
+    "A",
+    "D",
+    "F",
+    "G"
+   ]
+  },
+  "C1": {
+   "ten": "Biểu C1 – Danh mục vị trí việc làm",
+   "sheet_candidates": [
+    "6. C1_VTVL",
+    "C1_VTVL",
+    "C1"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã VTVL",
+    "B": "Tên VTVL",
+    "C": "Loại nhân lực",
+    "D": "Quyết định",
+    "E": "Giờ chuẩn PP2",
+    "F": "Căn cứ quỹ giờ",
+    "G": "Trạng thái",
+    "H": "Giờ riêng",
+    "I": "Xác nhận giờ riêng",
+    "J": "Chế độ làm việc",
+    "K": "Kiểm tra quỹ giờ"
+   },
+   "formula_cols": [
+    "E",
+    "K"
+   ],
+   "required": [
+    "A"
+   ]
+  },
+  "A2": {
+   "ten": "Biểu A2 – Công việc và sản phẩm",
+   "sheet_candidates": [
+    "2. A2_CongViec",
+    "A2_CongViec",
+    "A2"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã công việc",
+    "B": "Mã nhiệm vụ",
+    "C": "Mã VTVL",
+    "D": "Tên công việc",
+    "E": "Sản phẩm",
+    "F": "Đơn vị tính",
+    "G": "Chất lượng",
+    "H": "Căn cứ (nguồn)"
+   },
+   "formula_cols": [],
+   "required": [
+    "A"
+   ]
+  },
+  "B1": {
+   "ten": "Biểu B1 – Khối lượng và thời gian",
+   "sheet_candidates": [
+    "3. B1_KhoiLuong",
+    "B1_KhoiLuong",
+    "B1"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã công việc",
+    "B": "Mã VTVL",
+    "C": "Số SP/năm",
+    "D": "TB phút/SP",
+    "E": "Giờ bổ sung",
+    "F": "Giờ SP",
+    "G": "Giờ tổng",
+    "H": "Nguồn SL",
+    "I": "Nguồn thời gian",
+    "J": "Trạng thái căn cứ thời gian",
+    "K": "Kỳ",
+    "L": "Mã SP danh mục",
+    "M": "Nhóm",
+    "N": "Phút/SP chuẩn",
+    "O": "Xác nhận chuẩn",
+    "P": "Phút/SP dùng tính",
+    "Q": "Nguồn thời gian dùng tính",
+    "R": "Cảnh báo",
+    "S": "Giải trình khác chuẩn"
+   },
+   "formula_cols": [
+    "B",
+    "F",
+    "G",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R"
+   ],
+   "required": [
+    "A"
+   ]
+  },
+  "B2": {
+   "ten": "Biểu B2 chi tiết – Tác động thay đổi",
+   "sheet_candidates": [
+    "4. B2_CT_TacDong",
+    "4. B2_TacDong",
+    "B2_TacDong",
+    "B2 chi tiết",
+    "B2"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã công việc",
+    "B": "Mã VTVL",
+    "C": "Loại tác động",
+    "D": "Công đoạn",
+    "E": "SP áp dụng",
+    "F": "Phút trước",
+    "G": "Phút sau",
+    "H": "Giờ giảm trực tiếp",
+    "I": "Giờ việc mới",
+    "J": "Nguồn/bằng chứng",
+    "K": "Kỳ",
+    "L": "Cơ sở B1",
+    "M": "Trạng thái",
+    "N": "Giờ giảm hợp lệ",
+    "O": "Giờ tăng hợp lệ",
+    "P": "Kiểm tra",
+    "Q": "Kinh phí trước",
+    "R": "Kinh phí sau",
+    "S": "Đối chiếu trùng"
+   },
+   "formula_cols": [
+    "B",
+    "H",
+    "N",
+    "O",
+    "P"
+   ],
+   "required": [
+    "A"
+   ]
+  },
+  "C2": {
+   "ten": "Biểu C2 – Bản mô tả và khung năng lực",
+   "sheet_candidates": [
+    "7. C2_NangLuc",
+    "C2_NangLuc",
+    "C2"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã VTVL",
+    "B": "Trách nhiệm",
+    "C": "Năng lực chung",
+    "D": "Chuyên môn",
+    "E": "Lãnh đạo",
+    "F": "Căn cứ",
+    "G": "Nguồn bản mô tả"
+   },
+   "formula_cols": [],
+   "required": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "F",
+    "G"
+   ]
+  },
+  "C3": {
+   "ten": "Biểu C3 – Nhu cầu nhân lực PP1, PP2, PP3",
+   "sheet_candidates": [
+    "8. C3_NhuCau",
+    "C3_NhuCau",
+    "C3"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã VTVL",
+    "B": "Phương pháp",
+    "C": "Giờ B1",
+    "D": "Giờ tác động B2",
+    "E": "Giờ ròng",
+    "F": "Giờ PP2",
+    "G": "Người quy đổi PP2",
+    "H": "Người PP1",
+    "I": "Người PP3",
+    "J": "Người cần bố trí",
+    "K": "Nguồn/giải trình",
+    "L": "Trạng thái",
+    "M": "Cảnh báo",
+    "N": "Số dòng B1 chưa đạt"
+   },
+   "formula_cols": [
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "M",
+    "N"
+   ],
+   "required": [
+    "A"
+   ]
+  },
+  "D1": {
+   "ten": "Biểu D1 – Nhân lực hiện có",
+   "sheet_candidates": [
+    "9. D1_NhanLuc",
+    "D1_NhanLuc",
+    "D1"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã nguồn lực",
+    "B": "Mã VTVL",
+    "C": "Loại nhân lực",
+    "D": "Giờ quy đổi/năm",
+    "E": "Giờ dành cho VTVL",
+    "F": "Giờ việc khác",
+    "G": "Nơi tính BC",
+    "H": "Nguồn",
+    "I": "Trạng thái",
+    "J": "Cảnh báo",
+    "K": "Giờ riêng theo chế độ"
+   },
+   "formula_cols": [
+    "D",
+    "J"
+   ],
+   "required": [
+    "A"
+   ]
+  },
+  "DB": {
+   "ten": "Dự báo từng năm 2027–2031",
+   "sheet_candidates": [
+    "DU_BAO_5_NAM",
+    "Dự báo",
+    "DuBao"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã VTVL",
+    "B": "Năm",
+    "C": "Biến động so C3",
+    "D": "Nội dung thay đổi",
+    "E": "Căn cứ nguồn",
+    "F": "Trạng thái xác nhận",
+    "G": "Người C3 năm cơ sở",
+    "H": "Người cần bố trí trong năm",
+    "I": "Kiểm tra",
+    "J": "Ghi chú"
+   },
+   "formula_cols": [
+    "G",
+    "H",
+    "I"
+   ],
+   "required": [
+    "A",
+    "B",
+    "C"
+   ]
+  },
+  "D2": {
+   "ten": "Biểu D2 – Phương án biên chế 2027–2031",
+   "sheet_candidates": [
+    "10. D2_PhuongAn",
+    "D2_PhuongAn",
+    "D2"
+   ],
+   "header_row": 2,
+   "key_col": "A",
+   "cols": {
+    "A": "Mã VTVL",
+    "B": "Năm",
+    "C": "Số người cần bố trí",
+    "D": "Số người có thể bố trí",
+    "E": "Biên chế được giao",
+    "F": "Điều chuyển/bố trí lại",
+    "G": "Đề nghị điều chỉnh",
+    "H": "Nguồn/giải trình",
+    "I": "Trạng thái",
+    "J": "Cảnh báo",
+    "K": "PP2 người quy đổi",
+    "L": "Người C3 năm cơ sở",
+    "M": "Kiểm soát cơ sở",
+    "N": "Văn bản thẩm định"
+   },
+   "formula_cols": [
+    "C",
+    "J",
+    "K",
+    "L",
+    "M"
+   ],
+   "required": [
+    "A",
+    "B"
+   ]
+  }
+ },
+ "sheets_khac": {
+  "NHAT_KY": [
+   "15. S_NhatKy",
+   "S_NhatKy"
+  ],
+  "KIEM_TRA": [
+   "13. K_KiemTra",
+   "K_KiemTra"
+  ],
+  "B2_TONG_HOP": [
+   "5. B2_ThayDoi"
+  ],
+  "DM_SAN_PHAM": [
+   "11. DM_SAN_PHAM"
+  ],
+  "DM_THAM_SO": [
+   "DM_THAM_SO"
+  ]
+ },
+ "sheet_an_theo_thiet_ke": [
+  "13. K_KiemTra",
+  "14. T_TienDo",
+  "15. S_NhatKy",
+  "DU_BAO_5_NAM"
+ ],
+ "sheet_bat_buoc": [
+  "HUONG_DAN",
+  "HD_DIEN_BIEU",
+  "1. A1_NhiemVu",
+  "2. A2_CongViec",
+  "3. B1_KhoiLuong",
+  "4. B2_CT_TacDong",
+  "5. B2_ThayDoi",
+  "6. C1_VTVL",
+  "7. C2_NangLuc",
+  "8. C3_NhuCau",
+  "9. D1_NhanLuc",
+  "10. D2_PhuongAn",
+  "11. DM_SAN_PHAM",
+  "12. CHIA_VUNG_CAP_XA",
+  "13. K_KiemTra",
+  "14. T_TienDo",
+  "15. S_NhatKy",
+  "DU_BAO_5_NAM",
+  "QUY_TAC_MA",
+  "DM_THAM_SO",
+  "DM_06_NHOM"
+ ]
+}
