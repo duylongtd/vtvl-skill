@@ -30,7 +30,7 @@ try:
 except ImportError:
     sys.exit("Thiếu thư viện openpyxl. Cài: pip install openpyxl python-docx")
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_DIR = os.path.join(os.path.dirname(HERE), "config")
 
@@ -1054,33 +1054,55 @@ def xuat_docx(kt, path, meta):
 
 def main():
     ap = argparse.ArgumentParser(description="Kiểm tra logic Bộ biểu VTVL (chỉ đọc).")
-    ap.add_argument("file", help="Bộ biểu .xlsx")
+    ap.add_argument("file", nargs="+", help="Một hoặc nhiều bộ biểu .xlsx")
     ap.add_argument("--bien-che", type=float, default=None, help="Tổng biên chế được giao (cho C3-03, D2-02)")
     ap.add_argument("--so-nguoi", type=int, default=None, help="Số người có mặt tại 30/9/2026 (cho D1-01)")
     ap.add_argument("--loai-don-vi", choices=["xa", "tinh", "su_nghiep"], default="xa")
     ap.add_argument("--da-tham-dinh", action="store_true", help="Hồ sơ đã được cơ quan đầu mối thẩm định (bỏ qua TT-01..03)")
-    ap.add_argument("--out", default=None, help="Tên tệp kết quả, không đuôi (mặc định: <tên tệp>_ket_qua)")
+    ap.add_argument("--out", default=None, help="Tên tệp kết quả, không đuôi (mặc định: <tên tệp>_ket_qua). Nhiều tệp đầu vào: --out là THƯ MỤC chứa kết quả")
     ap.add_argument("--json", action="store_true", help="In JSON ra stdout thay vì bảng tóm tắt")
     args = ap.parse_args()
-    if not os.path.exists(args.file):
-        sys.exit(f"Không thấy tệp: {args.file}")
-    out = args.out or os.path.splitext(args.file)[0] + "_ket_qua"
-    kt = KiemTra(args.file, args)
+    files = args.file
+    nhieu = len(files) > 1
+    if nhieu and args.out:
+        os.makedirs(args.out, exist_ok=True)
+    tong_hop = []
+    for f in files:
+        if not os.path.exists(f):
+            print(f"Không thấy tệp: {f}")
+            continue
+        if nhieu:
+            out = os.path.join(args.out or os.path.dirname(f) or ".", os.path.splitext(os.path.basename(f))[0] + "_ket_qua")
+        else:
+            out = args.out or os.path.splitext(f)[0] + "_ket_qua"
+        data = chay_mot(f, args, out)
+        tong_hop.append(data)
+    if nhieu:
+        print("\n=== TỔNG HỢP %d tệp ===" % len(tong_hop))
+        for d in tong_hop:
+            t = d["tong"]
+            print(f"  {os.path.basename(d['file'])}: BẮT BUỘC {t.get(MUC_BAT_BUOC,0)} / CẦN {t.get(MUC_CAN,0)} / LƯU Ý {t.get(MUC_LUU_Y,0)}")
+        with open(os.path.join(args.out or ".", "tong_hop.json"), "w", encoding="utf-8") as fh:
+            json.dump([{"file": d["file"], "tong": d["tong"], "bo_qua": d["bo_qua"]} for d in tong_hop], fh, ensure_ascii=False, indent=1)
+
+
+def chay_mot(f, args, out):
+    kt = KiemTra(f, args)
     kt.chay()
     meta = {"thoi_diem": datetime.now().strftime("%d/%m/%Y %H:%M"), "bien_che": args.bien_che, "so_nguoi": args.so_nguoi,
             "loai_don_vi": args.loai_don_vi, "da_tham_dinh": args.da_tham_dinh, "version": VERSION}
     xuat_xlsx(kt, out + ".xlsx")
     co_docx = xuat_docx(kt, out + ".docx", meta)
-    data = {"meta": meta, "file": args.file, "bo_qua": kt.bo_qua,
+    data = {"meta": meta, "file": f, "bo_qua": kt.bo_qua,
             "tong": dict(Counter(p.muc for p in kt.ph)),
             "phat_hien": [dict(zip(["muc", "ma", "bieu", "o", "gia_tri", "noi_dung", "sua", "can_cu"], p.row())) for p in kt.ph]}
-    with open(out + ".json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=1)
+    with open(out + ".json", "w", encoding="utf-8") as fh:
+        json.dump(data, fh, ensure_ascii=False, indent=1)
     if args.json:
         print(json.dumps(data, ensure_ascii=False, indent=1))
-        return
+        return data
     cnt = data["tong"]
-    print(f"vtvl-kiem-tra v{VERSION} – {os.path.basename(args.file)}")
+    print(f"vtvl-kiem-tra v{VERSION} – {os.path.basename(f)}")
     print(f"Phát hiện: {len(kt.ph)}  |  BẮT BUỘC {cnt.get(MUC_BAT_BUOC,0)}  CẦN {cnt.get(MUC_CAN,0)}  LƯU Ý {cnt.get(MUC_LUU_Y,0)}")
     if kt.bo_qua:
         print("Bỏ qua:", "; ".join(kt.bo_qua))
@@ -1090,6 +1112,7 @@ def main():
     for b, c in by.items():
         print(f"  {b}: BB {c.get(MUC_BAT_BUOC,0)} / CẦN {c.get(MUC_CAN,0)} / LƯU Ý {c.get(MUC_LUU_Y,0)}")
     print("Kết quả:", out + ".docx" if co_docx else "(không có docx)", "|", out + ".xlsx", "|", out + ".json")
+    return data
 
 
 if __name__ == "__main__":

@@ -20,6 +20,8 @@ Yêu cầu Python 3.9 trở lên. Windows: cài Python từ python.org, tích "A
 
 ```bash
 python scripts/kiem_tra.py "Bo_bieu_xa_ABC.xlsx" --bien-che 25 --so-nguoi 23
+# nhiều file một lần (kết quả vào thư mục ket_qua/)
+python scripts/kiem_tra.py xa_A.xlsx xa_B.xlsx xa_C.xlsx --bien-che 25 --so-nguoi 23 --out ket_qua
 ```
 
 Tham số:
@@ -35,6 +37,8 @@ Tham số:
 Kết quả: `TEN.docx` (báo cáo theo từng biểu), `TEN.xlsx` (bảng lọc), `TEN.json` (máy đọc). Công cụ **không sửa** tệp gốc.
 
 ## Dùng với AI
+
+Hướng dẫn từng bước cho Claude, ChatGPT, Gemini và Colab: **[docs/HUONG_DAN_AI.md](docs/HUONG_DAN_AI.md)**.
 
 - **Claude**: tải thư mục này lên làm skill (Settings → Skills), hoặc đặt vào `.claude/skills/vtvl-kiem-tra/` trong project. Gửi file và nói "kiểm tra bộ biểu VTVL".
 - **AI khác**: đưa `SKILL.md` làm hướng dẫn hệ thống và cho AI quyền chạy `scripts/kiem_tra.py`. AI không cần "hiểu" quy tắc, chỉ cần chạy script và đọc kết quả.

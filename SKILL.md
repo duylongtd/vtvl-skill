@@ -20,7 +20,7 @@ App kê khai VTVL chỉ kiểm tra **định dạng** (mã có tồn tại, ô b
    ```
    python scripts/kiem_tra.py <file.xlsx> --bien-che <N> --so-nguoi <M> [--da-tham-dinh] [--loai-don-vi xa] --out <ten_ket_qua>
    ```
-   Thiếu thông số thì vẫn chạy; script tự bỏ qua quy tắc cần thông số đó và ghi rõ trong báo cáo.
+   Nhiều file: liệt kê tất cả sau `kiem_tra.py`, `--out` là thư mục. Thiếu thông số thì vẫn chạy; script tự bỏ qua quy tắc cần thông số đó và ghi rõ trong báo cáo.
 4. **Trả kết quả** cho người dùng:
    - Gửi file `<ten_ket_qua>.docx` (báo cáo theo từng biểu, đúng form Yêu cầu kiểm tra) và `.xlsx` (để lọc).
    - Trong chat: nêu tổng số BẮT BUỘC / CẦN / LƯU Ý, rồi liệt kê các lỗi **BẮT BUỘC** theo mẫu một dòng: `Biểu – Ô – sai gì – sửa thế nào`. Lỗi CẦN chỉ nêu số lượng theo biểu, chi tiết ở file.
