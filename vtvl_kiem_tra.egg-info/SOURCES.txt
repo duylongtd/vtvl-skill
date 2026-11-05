@@ -4,6 +4,7 @@ pyproject.toml
 vtvl_kiem_tra/__init__.py
 vtvl_kiem_tra/__main__.py
 vtvl_kiem_tra/kiem_tra.py
+vtvl_kiem_tra/nhat_ky.py
 vtvl_kiem_tra.egg-info/PKG-INFO
 vtvl_kiem_tra.egg-info/SOURCES.txt
 vtvl_kiem_tra.egg-info/dependency_links.txt

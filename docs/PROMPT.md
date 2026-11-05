@@ -9,7 +9,7 @@ Dựa theo skill tại https://github.com/duylongtd/vtvl-skill, hãy kiểm tra 
 Biên chế được giao: [25]; số người có mặt tại 30/9/2026: [23]. (Không biết thì bỏ dòng này.)
 
 1. Làm đúng mục "Chỉ dẫn cho AI" trong README của skill: cài công cụ bằng pip từ GitHub (hoặc dùng 3 file công cụ tôi đính kèm nếu không có mạng), chạy lệnh vtvl-kiem-tra với --in-bao-cao. Không tự mở file Excel để suy luận lỗi.
-2. Trả kết quả theo mẫu: "Tổng: BẮT BUỘC x · CẦN y · LƯU Ý z"; liệt kê MỌI lỗi BẮT BUỘC, mỗi lỗi một dòng "Biểu – Ô – sai gì – sửa thế nào – [mã]"; lỗi CẦN chỉ nêu số lượng theo biểu; đưa file ket_qua .docx (không đưa được thì dán nguyên báo cáo).
+2. Trả kết quả theo mẫu: "Tổng: BẮT BUỘC x · CẦN y · LƯU Ý z"; liệt kê MỌI lỗi BẮT BUỘC, mỗi lỗi một dòng "Biểu – Ô – sai gì – sửa thế nào – [mã]"; lỗi CẦN chỉ nêu số lượng theo biểu; đưa file nhật ký _NhatKy.xlsx (không đưa được thì dán nguyên báo cáo gọn).
 3. Không sửa file, không thêm quy tắc ngoài RULES.md, không nêu tên người trong file.
 4. Không chạy được công cụ thì nói rõ và ghi "CHẾ ĐỘ THỦ CÔNG" ở đầu kết quả.
 ```
@@ -27,7 +27,7 @@ Phải nhập tay vì nếu lấy ngay trong file thì file tự chứng nhận 
 ## Prompt ngắn (các lần kiểm tra lại, cùng một chat)
 
 ```
-Tôi đã sửa theo kết quả lần trước, file mới đính kèm. Chạy lại vtvl-kiem-tra với cùng thông số, trả kết quả theo mẫu cũ và cho biết lỗi nào đã hết, lỗi nào còn.
+Tôi đã sửa theo kết quả lần trước, file mới đính kèm. Chạy lại vtvl-kiem-tra với cùng thông số và cùng tên tệp nhật ký để tăng version; trả kết quả theo mẫu cũ và cho biết lỗi nào đã hết, còn, mới (sheet Da_het, cột "So với version trước").
 ```
 
 ## Prompt nhiều file một lần

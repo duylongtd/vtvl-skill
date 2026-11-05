@@ -39,7 +39,8 @@ Nếu sandbox không có mạng: nói rõ với người dùng và đề nghị 
 - Dòng đầu: `Tổng: BẮT BUỘC x · CẦN y · LƯU Ý z` cho từng file. Nếu BẮT BUỘC > 0: *"Hồ sơ còn lỗi BẮT BUỘC sẽ bị trả lại (CV05 mục II)."*
 - Liệt kê **mọi lỗi BẮT BUỘC**, mỗi lỗi một dòng: `Biểu – Ô – sai gì – sửa thế nào – [mã quy tắc]`.
 - Lỗi CẦN: nêu số lượng theo biểu; chi tiết nằm trong báo cáo.
-- Đưa file `ket_qua/<tên>_ket_qua.docx` (và `.xlsx`) cho người dùng tải; nếu không đưa file được thì dán nguyên báo cáo Markdown mà `--in-bao-cao` đã in.
+- Đưa file **nhật ký** `<tên>_NhatKy.xlsx` cho người dùng tải (sheet Tong_quan có điểm và so sánh version; Kiem_tra_noi_dung / Kiem_tra_cau_truc / Can_don_vi_xu_ly gom lỗi cùng loại; Chi_tiet từng ô; Lich_su các version). Nếu không đưa file được thì dán nguyên báo cáo gọn mà `--in-bao-cao` đã in. Chỉ thêm `--docx` khi người dùng yêu cầu bản Word.
+- Kiểm tra lại sau khi sửa: chạy cùng tên `--out` (hoặc để mặc định) để nhật ký tự tăng version và đánh dấu lỗi ĐÃ HẾT / CÒN / MỚI; tên file có `Version_N` thì lấy N làm version.
 - Kết thúc bằng: *"Sửa trên bộ biểu/app, gửi lại file để kiểm tra đến khi BẮT BUỘC = 0."*
 
 ### Không được làm
@@ -59,7 +60,7 @@ Nếu sandbox không có mạng: nói rõ với người dùng và đề nghị 
 pip install git+https://github.com/duylongtd/vtvl-skill.git
 vtvl-kiem-tra xa_A.xlsx xa_B.xlsx --bien-che 25 --so-nguoi 23 --out ket_qua
 ```
-Kết quả trong `ket_qua/`: `.docx` (báo cáo theo từng biểu), `.xlsx` (bảng lọc), `.md`, `.json`. Công cụ **không sửa** file gốc.
+Kết quả: `<tên>_NhatKy.xlsx` (nhật ký rà soát: điểm, lỗi gom theo loại, chi tiết từng ô, lịch sử version), `.md` (báo cáo gọn), `.json`; thêm `--docx` nếu cần bản Word. Chạy lại sau khi sửa với cùng tên đầu ra để nhật ký tự tăng version và cho biết lỗi nào đã hết. Công cụ **không sửa** file gốc.
 
 **Lưu ý bảo mật (CV05):** bộ biểu chứa dữ liệu cá nhân ở D1. Chỉ dùng tài khoản AI được cơ quan cho phép; với tài khoản công cộng, hãy chạy trên máy rồi chỉ đưa **file kết quả** (chỉ có mã ô) cho AI giải thích.
 

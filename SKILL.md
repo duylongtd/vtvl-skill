@@ -23,7 +23,7 @@ App kê khai VTVL chỉ kiểm tra **định dạng** (mã có tồn tại, ô b
    (Nếu skill chưa có trên máy: `pip install git+https://github.com/duylongtd/vtvl-skill.git` rồi dùng lệnh `vtvl-kiem-tra` với cùng tham số.)
    Nhiều file: liệt kê tất cả sau `kiem_tra.py`, `--out` là thư mục. Thiếu thông số thì vẫn chạy; script tự bỏ qua quy tắc cần thông số đó và ghi rõ trong báo cáo.
 4. **Trả kết quả** cho người dùng:
-   - Gửi file `<ten_ket_qua>.docx` (báo cáo theo từng biểu, đúng form Yêu cầu kiểm tra) và `.xlsx` (để lọc).
+   - Gửi file nhật ký `<ten>_NhatKy.xlsx` (Tong_quan, Kiem_tra_noi_dung, Kiem_tra_cau_truc, Can_don_vi_xu_ly, Chi_tiet, Da_het, Lich_su). Bản Word chỉ khi người dùng yêu cầu (`--docx`).
    - Trong chat: nêu tổng số BẮT BUỘC / CẦN / LƯU Ý, rồi liệt kê các lỗi **BẮT BUỘC** theo mẫu một dòng: `Biểu – Ô – sai gì – sửa thế nào`. Lỗi CẦN chỉ nêu số lượng theo biểu, chi tiết ở file.
    - Nói rõ: hồ sơ còn lỗi BẮT BUỘC sẽ bị trả lại (CV05 mục II).
 5. **Không làm**:

@@ -1,5 +1,10 @@
 # Nhật ký phiên bản
 
+## 0.3.0 – 05/11/2026
+- Đầu ra mặc định là **nhật ký Excel** `<tên>_NhatKy.xlsx`: lỗi cùng loại gom một dòng (746 ô → ~25 dòng), tách sheet nội dung / cấu trúc / việc đơn vị xử lý, điểm 0–100 để theo dõi tiến độ, Chi_tiet, Da_het, Lich_su theo version. Chạy lại cùng tên đầu ra để so với version trước.
+- Báo cáo .docx chỉ xuất khi `--docx`; `.md` cũng gom theo loại.
+- Sửa mã: căn cứ ở A2 dùng A2-01 (trước bị trùng với A2-02 tên sản phẩm).
+
 ## 0.2.0 – 05/11/2026
 - Đóng gói thành package: `pip install git+https://github.com/duylongtd/vtvl-skill.git` → lệnh `vtvl-kiem-tra`. Code và config chuyển vào `vtvl_kiem_tra/`; `scripts/kiem_tra.py` giữ làm bọc tương thích.
 - README mở đầu bằng "Chỉ dẫn cho AI": thang A (pip từ GitHub) → B (tải raw) → C (thủ công, có gắn nhãn); mẫu trình bày kết quả cố định.

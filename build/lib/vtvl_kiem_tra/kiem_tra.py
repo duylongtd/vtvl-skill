@@ -21,7 +21,7 @@ import os
 import re
 import sys
 import unicodedata
-from collections import Counter, defaultdict
+from collections import Counter, OrderedDict, defaultdict
 from datetime import datetime
 
 try:
@@ -30,7 +30,7 @@ try:
 except ImportError:
     sys.exit("Thiếu thư viện openpyxl. Cài: pip install openpyxl python-docx")
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG_DIR = os.path.join(HERE, "config")
 
@@ -475,26 +475,28 @@ class KiemTra:
                              "Chỉ chọn 'Đã kiểm chứng' khi có đối chiếu, xác nhận thật; ghi đủ nguồn (số, ngày, người xác nhận)", MUC_BAT_BUOC, "CV05 'Về trạng thái', 'Về kiểm chứng'")
 
     # ================================================================ căn cứ
-    def _kt_can_cu(self, ma_prefix, key, col, bat_buoc_dieu_khoan=True):
+    def _kt_can_cu(self, ma_prefix, key, col, bat_buoc_dieu_khoan=True, ma=None):
+        """ma: (mã thiếu văn bản, mã thiếu điều khoản, mã chung chung); mặc định prefix-01/-02/-03."""
         b = self.B[key]
         if not b:
             return
+        m1, m2, m3 = ma or (f"{ma_prefix}-01", f"{ma_prefix}-02", f"{ma_prefix}-03")
         cc = self.qt["can_cu"]
         for i, row in enumerate(b.rows):
             v = row.get(col)
             s = chuan(v)
             if trong(v):
-                self.add(f"{ma_prefix}-01", self.ten(key), b.o(i, col), "", "Căn cứ/nguồn trống", "Ghi loại văn bản, số hiệu, ngày, điều, khoản, điểm", MUC_BAT_BUOC, "YC; CV05 PL1-8")
+                self.add(m1, self.ten(key), b.o(i, col), "", "Căn cứ/nguồn trống", "Ghi loại văn bản, số hiệu, ngày, điều, khoản, điểm", MUC_BAT_BUOC, "YC; CV05 PL1-8")
                 continue
             co_vb = any(k in s for k in cc["loai_van_ban"]) and re.search(r"\d", s)
             if not co_vb:
-                self.add(f"{ma_prefix}-01", self.ten(key), b.o(i, col), v, "Căn cứ không có loại văn bản + số hiệu",
+                self.add(m1, self.ten(key), b.o(i, col), v, "Căn cứ không có loại văn bản + số hiệu",
                          "Ghi đủ số, ngày, cơ quan ban hành (ví dụ: Quyết định số 12-QĐ/ĐU ngày 15/3/2026)", MUC_BAT_BUOC, "YC; CV05 PL1-8; PL2-11")
             elif bat_buoc_dieu_khoan and not any(k in s for k in cc["dieu_khoan"]):
-                self.add(f"{ma_prefix}-02", self.ten(key), b.o(i, col), v, "Căn cứ không ghi điều, khoản, điểm",
+                self.add(m2, self.ten(key), b.o(i, col), v, "Căn cứ không ghi điều, khoản, điểm",
                          "Bổ sung điều, khoản, điểm của văn bản", MUC_BAT_BUOC, "YC; CV05 4.2(1); PL1-8")
             if any(k in s for k in cc["chung_chung"]):
-                self.add(f"{ma_prefix}-03", self.ten(key), b.o(i, col), v, "Căn cứ/nguồn ghi chung chung hoặc còn ký tự giữ chỗ",
+                self.add(m3, self.ten(key), b.o(i, col), v, "Căn cứ/nguồn ghi chung chung hoặc còn ký tự giữ chỗ",
                          "Dẫn văn bản cụ thể", MUC_BAT_BUOC, "YC; CV05 PL1-8")
 
     # ================================================================ A1
@@ -531,7 +533,7 @@ class KiemTra:
         if not b:
             return
         qt = self.qt
-        self._kt_can_cu("A2", "A2", "H")
+        self._kt_can_cu("A2", "A2", "H", ma=("A2-01", "A2-01", "A2-01"))
         a1 = self.B["A1"].by_key("A") if self.B["A1"] else None
         c1 = self.B["C1"].by_key("A") if self.B["C1"] else None
         sp = defaultdict(list)
@@ -690,7 +692,7 @@ class KiemTra:
             # B1-09 việc tham mưu điền phút
             ten_cv = cv_ten.get(chuan_ma(row.get("A")), "")
             if d and any(k in ten_cv for k in qt["pp3_tu_khoa_cong_viec"]):
-                self.add("B1-09", self.ten("B1"), b.o(i, "D"), row.get("D"), f"Công việc '{ten_cv[:60]}' thuộc nhóm tham mưu/thẩm định/kiểm tra nhưng được điền phút/SP",
+                self.add("B1-09", self.ten("B1"), b.o(i, "D"), f"{row.get('D')} phút – {ten_cv[:50]}", "Công việc thuộc nhóm tham mưu/nghiên cứu/thẩm định/kiểm tra/giám sát nhưng được điền phút/SP",
                          "Việc khó chuẩn hoá thời gian xác định theo PP3 (có hồ sơ), không bắt buộc quy ra phút", MUC_CAN, "CV05 'Về thời gian'; PL1-12; PL2-19")
             if so(row.get("E")):
                 e_vals[so(row.get("E"))] += 1
@@ -1052,25 +1054,37 @@ def xuat_docx(kt, path, meta):
     return True
 
 
-def xuat_md(kt, meta):
+def xuat_md(kt, meta, tom_tat=None):
+    """Báo cáo gọn: gom lỗi cùng loại trong cùng biểu thành một dòng."""
+    from .nhat_ky import _nen_vi_tri
     cnt = Counter(p.muc for p in kt.ph)
-    L = [f"# Kết quả kiểm tra bộ biểu VTVL – {os.path.basename(kt.path)}",
-         f"Công cụ vtvl-kiem-tra v{VERSION} · {meta['thoi_diem']} · biên chế giao: {meta['bien_che']} · có mặt 30/9/2026: {meta['so_nguoi']} · đã thẩm định: {'có' if meta['da_tham_dinh'] else 'chưa'}",
-         "", f"**Tổng: {len(kt.ph)} phát hiện – BẮT BUỘC {cnt.get(MUC_BAT_BUOC,0)} · CẦN {cnt.get(MUC_CAN,0)} · LƯU Ý {cnt.get(MUC_LUU_Y,0)}**"]
+    tt = tom_tat or {}
+    L = [f"# Nhật ký rà soát Bộ biểu VTVL – {os.path.basename(kt.path)} – version {tt.get('version', '')}",
+         f"vtvl-kiem-tra v{VERSION} · {meta['thoi_diem']} · biên chế giao: {meta['bien_che']} · có mặt 30/9/2026: {meta['so_nguoi']} · đã thẩm định: {'có' if meta['da_tham_dinh'] else 'chưa'}",
+         "", f"**Điểm: {tt.get('diem', '')}/100 ({tt.get('xep_loai', '')}) · Tổng: BẮT BUỘC {cnt.get(MUC_BAT_BUOC,0)} · CẦN {cnt.get(MUC_CAN,0)} · LƯU Ý {cnt.get(MUC_LUU_Y,0)} ({len(kt.ph)} ô, {tt.get('so_loai', '')} loại lỗi)**"]
     if cnt.get(MUC_BAT_BUOC, 0):
         L.append("Hồ sơ còn lỗi BẮT BUỘC sẽ bị trả lại, không đưa vào tổng hợp (CV05 mục II).")
+    if tt.get("da_het") or tt.get("moi") or tt.get("con"):
+        L.append(f"So với version trước: đã hết {tt['da_het']} · còn {tt['con']} · mới {tt['moi']}")
     if kt.bo_qua:
         L.append("Bỏ qua do thiếu tham số: " + "; ".join(kt.bo_qua))
-    by = defaultdict(list)
+    gom = OrderedDict()
     for p in kt.ph:
-        by[p.bieu].append(p)
-    for bieu, items in by.items():
-        c = Counter(p.muc for p in items)
-        L += ["", f"## {bieu}  (BẮT BUỘC {c.get(MUC_BAT_BUOC,0)} · CẦN {c.get(MUC_CAN,0)} · LƯU Ý {c.get(MUC_LUU_Y,0)})",
-              "", "| Mức | Mã | Ô | Giá trị | Sai gì | Sửa thế nào | Căn cứ |", "|---|---|---|---|---|---|---|"]
-        for p in items:
-            L.append("| " + " | ".join(str(x).replace("|", "/").replace("\n", " ") for x in (p.muc, p.ma, p.o, p.gia_tri, p.noi_dung, p.sua, p.can_cu)) + " |")
-    L += ["", "## Không kiểm tra tự động được (người kiểm tra tự đối chiếu)",
+        g = gom.setdefault((p.bieu, p.muc, p.ma), {"cells": [], "nd": p.noi_dung, "sua": p.sua, "cc": p.can_cu, "vals": []})
+        g["cells"].append(p.o)
+        if p.gia_tri and len(g["vals"]) < 2 and p.gia_tri not in g["vals"]:
+            g["vals"].append(p.gia_tri)
+    thu_tu = {MUC_BAT_BUOC: 0, MUC_CAN: 1, MUC_LUU_Y: 2}
+    bieu_cu = None
+    for (bieu, muc, ma), g in sorted(gom.items(), key=lambda kv: (kv[0][0], thu_tu.get(kv[0][1], 9), kv[0][2])):
+        if bieu != bieu_cu:
+            L += ["", f"## {bieu}", "", "| Mức | Mã | Số ô | Vị trí | Sai gì | Sửa thế nào | Căn cứ |", "|---|---|---|---|---|---|---|"]
+            bieu_cu = bieu
+        vt = _nen_vi_tri(g["cells"], 6)
+        nd = g["nd"] + (f" (vd: {' | '.join(g['vals'])})" if g["vals"] and len(g["cells"]) > 1 else "")
+        L.append("| " + " | ".join(str(x).replace("|", "/").replace("\n", " ") for x in (muc, ma, len(g["cells"]), vt, nd, g["sua"], g["cc"])) + " |")
+    L += ["", "Chi tiết từng ô: sheet Chi_tiet trong tệp nhật ký .xlsx.",
+          "", "## Không kiểm tra tự động được (người kiểm tra tự đối chiếu)",
           "- Phiếu đo, phiếu khảo sát ở B1 cột I có tồn tại thật (CV05 4.1).",
           "- Không sao chép số liệu, giải trình từ hồ sơ mẫu (CV05 PL2-20).",
           "- Đơn vị sự nghiệp: phép tính PP1 theo định mức ngành (CV05 PL1-11).",
@@ -1087,7 +1101,10 @@ def main():
     ap.add_argument("--da-tham-dinh", action="store_true", help="Hồ sơ đã được cơ quan đầu mối thẩm định (bỏ qua TT-01..03)")
     ap.add_argument("--out", default=None, help="Tên tệp kết quả, không đuôi (mặc định: <tên tệp>_ket_qua). Nhiều tệp đầu vào: --out là THƯ MỤC chứa kết quả")
     ap.add_argument("--json", action="store_true", help="In JSON ra stdout thay vì bảng tóm tắt")
-    ap.add_argument("--in-bao-cao", action="store_true", help="In toàn bộ báo cáo (Markdown) ra màn hình, dùng khi không tải được tệp kết quả")
+    ap.add_argument("--in-bao-cao", action="store_true", help="In báo cáo gọn (Markdown, gom theo loại lỗi) ra màn hình, dùng khi không tải được tệp kết quả")
+    ap.add_argument("--docx", action="store_true", help="Xuất thêm báo cáo .docx (mặc định chỉ xuất nhật ký .xlsx)")
+    ap.add_argument("--nhat-ky-truoc", default=None, help="Tệp nhật ký của version trước để so sánh (mặc định: cùng tên tệp đầu ra nếu đã có)")
+    ap.add_argument("--version", type=int, default=None, help="Số version ghi vào nhật ký (mặc định: 'Version_N' trong tên tệp, hoặc version trước + 1)")
     args = ap.parse_args()
     files = args.file
     nhieu = len(files) > 1
@@ -1099,9 +1116,9 @@ def main():
             print(f"Không thấy tệp: {f}")
             continue
         if nhieu:
-            out = os.path.join(args.out or os.path.dirname(f) or ".", os.path.splitext(os.path.basename(f))[0] + "_ket_qua")
+            out = os.path.join(args.out or os.path.dirname(f) or ".", os.path.splitext(os.path.basename(f))[0] + "_NhatKy")
         else:
-            out = args.out or os.path.splitext(f)[0] + "_ket_qua"
+            out = args.out or os.path.splitext(f)[0] + "_NhatKy"
         data = chay_mot(f, args, out)
         tong_hop.append(data)
     if nhieu:
@@ -1114,18 +1131,19 @@ def main():
 
 
 def chay_mot(f, args, out):
+    from .nhat_ky import xuat_nhat_ky
     kt = KiemTra(f, args)
     kt.chay()
     meta = {"thoi_diem": datetime.now().strftime("%d/%m/%Y %H:%M"), "bien_che": args.bien_che, "so_nguoi": args.so_nguoi,
             "loai_don_vi": args.loai_don_vi, "da_tham_dinh": args.da_tham_dinh, "version": VERSION}
-    xuat_xlsx(kt, out + ".xlsx")
-    co_docx = xuat_docx(kt, out + ".docx", meta)
-    data = {"meta": meta, "file": f, "bo_qua": kt.bo_qua,
+    tom_tat = xuat_nhat_ky(kt, meta, out + ".xlsx", args.nhat_ky_truoc, args.version)
+    co_docx = xuat_docx(kt, out + ".docx", meta) if args.docx else False
+    data = {"meta": meta, "file": f, "bo_qua": kt.bo_qua, "nhat_ky": tom_tat,
             "tong": dict(Counter(p.muc for p in kt.ph)),
             "phat_hien": [dict(zip(["muc", "ma", "bieu", "o", "gia_tri", "noi_dung", "sua", "can_cu"], p.row())) for p in kt.ph]}
     with open(out + ".json", "w", encoding="utf-8") as fh:
         json.dump(data, fh, ensure_ascii=False, indent=1)
-    md = xuat_md(kt, meta)
+    md = xuat_md(kt, meta, tom_tat)
     with open(out + ".md", "w", encoding="utf-8") as fh:
         fh.write(md)
     if args.in_bao_cao:
@@ -1135,16 +1153,18 @@ def chay_mot(f, args, out):
         print(json.dumps(data, ensure_ascii=False, indent=1))
         return data
     cnt = data["tong"]
-    print(f"vtvl-kiem-tra v{VERSION} – {os.path.basename(f)}")
-    print(f"Phát hiện: {len(kt.ph)}  |  BẮT BUỘC {cnt.get(MUC_BAT_BUOC,0)}  CẦN {cnt.get(MUC_CAN,0)}  LƯU Ý {cnt.get(MUC_LUU_Y,0)}")
+    print(f"vtvl-kiem-tra v{VERSION} – {os.path.basename(f)} – version {tom_tat['version']} – điểm {tom_tat['diem']}/100 ({tom_tat['xep_loai']})")
+    print(f"Phát hiện: {len(kt.ph)} ô, {tom_tat['so_loai']} loại  |  BẮT BUỘC {cnt.get(MUC_BAT_BUOC,0)}  CẦN {cnt.get(MUC_CAN,0)}  LƯU Ý {cnt.get(MUC_LUU_Y,0)}")
     if kt.bo_qua:
         print("Bỏ qua:", "; ".join(kt.bo_qua))
+    if tom_tat["da_het"] or tom_tat["moi"] or tom_tat["con"]:
+        print(f"So với version trước: đã hết {tom_tat['da_het']} · còn {tom_tat['con']} · mới {tom_tat['moi']}")
     by = defaultdict(Counter)
     for p in kt.ph:
         by[p.bieu][p.muc] += 1
     for b, c in by.items():
         print(f"  {b}: BB {c.get(MUC_BAT_BUOC,0)} / CẦN {c.get(MUC_CAN,0)} / LƯU Ý {c.get(MUC_LUU_Y,0)}")
-    print("Kết quả:", out + ".docx" if co_docx else "(không có docx)", "|", out + ".xlsx", "|", out + ".md", "|", out + ".json")
+    print("Nhật ký:", out + ".xlsx", "| báo cáo gọn:", out + ".md", ("| " + out + ".docx") if co_docx else "")
     return data
 
 

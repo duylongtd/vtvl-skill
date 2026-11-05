@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vtvl-kiem-tra"
-version = "0.2.0"
+version = "0.3.0"
 description = "Kiểm tra logic Bộ biểu vị trí việc làm (VTVL) theo HD 07-HD/BTCTW và CV 05-CV/BCĐ"
 readme = "README.md"
 requires-python = ">=3.9"
